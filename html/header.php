@@ -185,7 +185,10 @@
                                     <div class="u-text">
                                         <form role="form" method="post" action="../servidor/cadastro/atualizarCidadeBairro.php">
                                             <div class="panel-body">
-                                                 <h4>Atualizar Cidade e Bairro</h4>
+                                                 <h4>Atualizar Cidade, Bairro e Usuário</h4>
+                                        <div class="form-group">
+                                            <input type="text" name="usuario" id="display_name" required="" class="form-control input" placeholder="Usuario" tabindex="2">
+                                        </div>
                                        <div class="form-group">
                                             <input type="text" name="cidade" id="display_name" required="" class="form-control input" placeholder="Cidade" tabindex="2">
                                         </div>

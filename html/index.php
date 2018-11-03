@@ -241,11 +241,15 @@ if (empty($_SESSION['nomeUsuario'])) {
                                                                     $result = pg_prepare($db, "my_query1", $query);
                                                                     $result = pg_execute($db, "my_query1", array($cpfUsuario));
                                                                     while ($row = pg_fetch_assoc($result)) {
+                                                                        echo "<form action='../servidor/cadastrarOficina/apagarOficina.php' method='post'>";
+                                                                        echo "<input type='hidden'  name='idOficina' id=' required='' value='". $row['IdOficina'] ."'  placeholder='' class='form-control form-control-line'>";
                                                                         echo "<tr>";
                                                                         echo "<td style='white-space: nowrap;  width='200'>" . $row['IdOficina'] . "</td>";
                                                                         echo "<td style='white-space: nowrap;  width='200'>" . $row['NomeOficina'] . "</td>";
                                                                         echo "<td style='white-space: nowrap;  width='200'>" . $row['DescricaoServicos'] . "</td>";
+                                                                        echo "<td style='white-space: nowrap;  width='200'><button type='submit' class='btn btn-danger'>APAGAR</button></td>";
                                                                         echo "</tr>";
+                                                                        echo "</form>";
                                                                     }
                                                                     
                                                                     ?>
@@ -364,7 +368,22 @@ if (empty($_SESSION['nomeUsuario'])) {
                                                             
                                                             <button type="submit" class="btn btn-success">CADASTRAR</button>
                                                     </form>
-          <form action="../servidor/cadastrarOficina/apagarOficina.php" method="post">
+          
+          <h4 class="modal-title">Atualizar oficina</h4>
+          <form action="../servidor/cadastrarOficina/atualizarOficina.php" method="post">
+                                                            <br>
+                                                            <label>Id</label>
+                                                            <input type="number"  name="id" id="" required=""  placeholder="" class="form-control form-control-line">
+                                                              <br>
+                                                            <label>Nome</label>
+                                                            <input type="text"  name="nomeOficina" id="" required=""  placeholder="" class="form-control form-control-line">
+                                                              <br>
+                                                            
+                                                              <br>
+                                                            
+                                                            <button type="submit" class="btn btn-success">Atualizar</button>
+                                                    </form>
+<!--          <form action="../servidor/cadastrarOficina/apagarOficina.php" method="post">
                                                             <br>
                                                             <label>Digite o id da oficina que deseja apagar</label>
                                                             <input type="number"  name="idOficina" id="" required=""  placeholder="" class="form-control form-control-line">
@@ -373,7 +392,7 @@ if (empty($_SESSION['nomeUsuario'])) {
                                                               <br>
                                                             
                                                             <button type="submit" class="btn btn-danger">APAGAR</button>
-                                                    </form>
+                                                    </form>-->
       </div>
       <div class="modal-footer">
         
