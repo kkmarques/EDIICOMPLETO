@@ -6,17 +6,17 @@ include_once ('../conexao.php');
 $cpf =  $_SESSION['cpfUsuario'];
 $cor = pg_escape_string($_POST['cor']);
 $id = pg_escape_string($_POST['id']);
-
+$placa = pg_escape_string($_POST['placa']);
 
 
 
 $query = 'UPDATE "schemaA".veiculos
-   SET "CorVeiculo"=$1
- WHERE "Id" = $2 and "CpfUsuario" = $3;';
+   SET "CorVeiculo"=$1, "PlacaVeiculo"=$2
+ WHERE "Id" = $3 and "CpfUsuario" = $4;';
 
 
 $result = pg_prepare($db, "my_query", $query);
-$result = pg_execute($db, "my_query", array($cor, $id, $cpf));
+$result = pg_execute($db, "my_query", array($cor,$placa, $id, $cpf));
 //
 
 $error = pg_last_error($db);

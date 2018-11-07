@@ -182,10 +182,12 @@ if (empty($_SESSION['nomeUsuario'])) {
                                                                 <th>ID</th>
                                                                 <th>Placa</th>
                                                                 <th>Cor</th>
+                                                                <th>Fabricante</th>
                                                                 <th>Modelo</th>
                                                                 <th>Ano</th>
-                                                                <th>Fabricante</th>
+                                                                
                                                             </thead>
+                                                           
                                                                 <tbody>
                                                                     <?php
                                                                     $cpfUsuario = (floatval($_SESSION['cpfUsuario']));
@@ -194,15 +196,19 @@ if (empty($_SESSION['nomeUsuario'])) {
                                                                     $result = pg_prepare($db, "my_query", $query);
                                                                     $result = pg_execute($db, "my_query", array($cpfUsuario));
                                                                     while ($row = pg_fetch_assoc($result)) {
+                                                                        echo "<form action='../servidor/cadastroCarro/apagarCarro.php' method='post'>";
+                                                                        echo "<input type='hidden'  name='idcarro' value='".$row['Id']."' required=''  placeholder='' class='form-control form-control-line'>";
                                                                         echo "<tr>";
                                                                         echo "<td style='white-space: nowrap;  width='200'>" . $row['Id'] . "</td>";
                                                                         echo "<td style='white-space: nowrap;  width='200'>" . $row['PlacaVeiculo'] . "</td>";
                                                                         echo "<td style='white-space: nowrap;  width='200'>" . $row['CorVeiculo'] . "</td>";
+                                                                        echo "<td  width='200'>" . $row['Fabricante'] . "</td>";
                                                                         echo "<td style='white-space: nowrap;' width='200'>" . $row['Modelo'] . "</td>";
 
                                                                         echo "<td  width='200'>" . $row['Ano'] . "</td>";
-                                                                        echo "<td  width='200'>" . $row['Fabricante'] . "</td>";
+                                                                        echo "<td><button type='submit' class='btn btn-danger'>APAGAR</button></td>";
                                                                         echo "</tr>";
+                                                                        echo "</form>";
                                                                     }
                                                                   
                                                                     ?>
@@ -295,7 +301,7 @@ if (empty($_SESSION['nomeUsuario'])) {
 //                                                                        echo "<td style='white-space: nowrap;  width='200'><button type='button' class='btn btn-success' data-toggle='modal' data-target='#modalPedido'>SOLICIONADO</BUTTON></td>";
                                                                         echo "</tr>";
                                                                     }
-                                                                    pg_close($db);
+                                                                   
                                                                     ?>
                                                                 <tbody>
                                                             </table>
@@ -372,8 +378,26 @@ if (empty($_SESSION['nomeUsuario'])) {
           <h4 class="modal-title">Atualizar oficina</h4>
           <form action="../servidor/cadastrarOficina/atualizarOficina.php" method="post">
                                                             <br>
-                                                            <label>Id</label>
-                                                            <input type="number"  name="id" id="" required=""  placeholder="" class="form-control form-control-line">
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            <label>Selecione a oficina que deseja atualizar!</label>
+                                                            
+                                                            <select class="form-control form-control-line" name="id" >
+                                                             <?php
+                                                                    $cpfUsuario = (floatval($_SESSION['cpfUsuario']));
+                                                                    
+                                                                    $query = 'SELECT "IdOficina", "NomeOficina", "DescricaoServicos"
+                                                                              FROM "schemaA".oficina WHERE "CpfUsuario" = $1';
+                                                                    $result = pg_prepare($db, "my_query6", $query);
+                                                                    $result = pg_execute($db, "my_query6", array($cpfUsuario));
+                                                                    while ($row = pg_fetch_assoc($result)) {
+                                                                        echo "<option value='". $row['IdOficina'] . "'>". $row['NomeOficina'] ."</option>";}
+                                                                    
+                                                            ?>
+                                                                </select>
+                                                            
                                                               <br>
                                                             <label>Nome</label>
                                                             <input type="text"  name="nomeOficina" id="" required=""  placeholder="" class="form-control form-control-line">
@@ -426,15 +450,23 @@ if (empty($_SESSION['nomeUsuario'])) {
                                                             <label>Cor</label>
                                                             <input type="text"  name="cor" id="" required=""  placeholder="" class="form-control form-control-line">
                                                               <br>
+                                                              <label>Fabricante</label>
+                                                            <select name="fabricante" class="form-control form-control-line"  required=""  id="marcas"></select>
+<!--                                                            <input type="text"  name="fabricante" id="" required=""  placeholder="" class="form-control form-control-line">-->
+                                                             <br>
                                                             <label>Modelo</label>
-                                                            <input type="text"  name="modelo" id="" required=""  placeholder="" class="form-control form-control-line">
+                                                            <select  name="modelo" class="form-control form-control-line" required="" id="veiculos">
+                                                                <option>AGUARDANDO FABRICANTE SER SELECIONADO</option>
+                                                            </select>
+<!--                                                            <input type="text"  name="modelo" id="" required=""  placeholder="" class="form-control form-control-line">-->
                                                               <br>
                                                             <label>Ano</label>
-                                                            <input type="text"  name="ano" id="" required=""  placeholder="" class="form-control form-control-line">
+                                                            <select name="ano" required=""  placeholder="" class="form-control form-control-line" id="ano">
+                                                                 <option>AGUARDANDO FABRICANTE SER SELECIONADO</option>
+                                                            </select>
+<!--                                                            <input type="text"  name="ano" id="" required=""  placeholder="" class="form-control form-control-line">-->
                                                             <br>
-                                                            <label>Fabricante</label>
-                                                            <input type="text"  name="fabricante" id="" required=""  placeholder="" class="form-control form-control-line">
-                                                             <br>
+                                                            
                                                             <button type="submit" class="btn btn-success">CADASTRAR</button>
                                                     </form>
                                                     
@@ -442,7 +474,7 @@ if (empty($_SESSION['nomeUsuario'])) {
                                             </div>
                                         </div>
           
-           <div class="col-lg-12 col-sm-12 col-xs-12">
+<!--           <div class="col-lg-12 col-sm-12 col-xs-12">
                                             <div class="white-box analytics-info">
                                                 <h3 class="box-title">Apagar Veiculo</h3>
                                                   
@@ -458,7 +490,7 @@ if (empty($_SESSION['nomeUsuario'])) {
                                                     
                                                 </ul>
                                             </div>
-                                        </div>
+                                        </div>-->
           
           
           <div class="col-lg-12 col-sm-12 col-xs-12">
@@ -468,14 +500,31 @@ if (empty($_SESSION['nomeUsuario'])) {
                                                 <ul class="list-inline two-part">
                                                     <form action="../servidor/cadastroCarro/atualizar.php" method="post">
                                                             <br>
-                                                            <label>Digite o id do veiculo que deseja atualizar</label>
-                                                            <input type="text"  name="id" id="" required=""  placeholder="" class="form-control form-control-line">
+                                                            <label>Selecione a placa do veiculo que deseja atualizar!</label>
+                                                            <select class="form-control form-control-line"  name="id">
+                                                            <?php
+                                                                    $cpfUsuario = (floatval($_SESSION['cpfUsuario']));
+                                                                    
+                                                                    $query = 'SELECT *FROM "schemaA".veiculos WHERE "CpfUsuario" = $1';
+                                                                    $result = pg_prepare($db, "my_query10", $query);
+                                                                    $result = pg_execute($db, "my_query10", array($cpfUsuario));
+                                                                    while ($row = pg_fetch_assoc($result)) {
+                                                                        echo "<option value='".$row['Id']."'>". $row['PlacaVeiculo'] ."</option>";
+                                                                       
+                                                                    }
+                                                                  
+                                                                    ?>
+                                                            </select>
+                                                            
                                                               <br>
-                                                             
-                                                            <label>Cor</label>
-                                                            <input type="text"  name="cor" id="" required=""  placeholder="" class="form-control form-control-line">
+                                                              <label>Placa</label>
+                                                              <input type="text"  name="placa" id="" required=""  placeholder="" class="form-control form-control-line">
                                                               <br>
-                                                            <button type="submit" class="btn btn-success">ATUALIZAR</button>
+                                                              <label>Cor</label>
+                                                              <input type="text"  name="cor" id="" required=""  placeholder="" class="form-control form-control-line">
+                                                              <br>
+                                                              
+                                                              <button type="submit" class="btn btn-success">ATUALIZAR</button>
                                                     </form>
                                                     
                                                 </ul>
@@ -755,6 +804,40 @@ if (empty($_SESSION['nomeUsuario'])) {
             $("#cpfUsuarioFinal").val(this.getAttribute("data-cpfUsuario"));
             $("#idOficina").val(this.getAttribute("data-idOficina"));
 })
+
+        $(document).ready(function () {
+            var urlBase = "http://fipeapi.appspot.com/api/1/carros/";
+            $.getJSON(urlBase + "marcas.json", function (data) {
+                var items = ["<option value=\"\">ESCOLHA UMA MARCA</option>"];
+                $.each(data, function (key, val) {
+                    items += ("<option  value='" + val.name+ "' dataid='"+val.id+"' >" + val.name + "</option>");
+                });
+                $("#marcas").html(items);
+            });
+            $("#marcas").change(function () {
+              
+                $.getJSON(urlBase + "veiculos/" + $("#marcas option:selected" ).attr('dataid') + ".json", function (data) {
+                    var items = ["<option value=\"\">ESCOLHA UM VEICULO</option>"];
+                    $.each(data, function (key, val) {
+                        items += ("<option dataid='"+val.id+"' value='" + val.name+ "'>" + val.name + "</option>");
+                    });
+                    $("#veiculos").html(items);
+                });
+            });
+            $("#veiculos").change(function () {
+                $.getJSON(urlBase + "veiculo/" + $("#marcas option:selected" ).attr('dataid') + "/" + $("#veiculos option:selected" ).attr('dataid') + ".json", function (data) {
+                    var items = ["<option value=\"\">ESCOLHA O ANO</option>"];
+                    $.each(data, function (key, val) {
+                    
+                     items += ("<option value='" +val.name.substring(0,4)+ "'>" + val.name.substring(0,4) + "</option>");
+                        
+                    });
+                    $("#ano").html(items);
+                });
+            });
+        });
+
+    
         </script>
     </body>
 
